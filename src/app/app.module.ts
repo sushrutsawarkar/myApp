@@ -1,14 +1,16 @@
-import { HttpClientModule } from '@angular/common/http';
-import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
+import { NgModule } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
 import { StoreModule } from '@ngrx/store';
-import { AppRoutingModule } from './app-routing.module';
+import { EffectsModule } from '@ngrx/effects';
+
 import { AppComponent } from './app.component';
-import { CoreModule } from './core.module';
 import { HeaderComponent } from './header/header.component';
+import { AppRoutingModule } from './app-routing.module';
 import { SharedModule } from './shared/shared.module';
-import { appReducer } from './store/app.reducer';
+import { CoreModule } from './core.module';
+import * as fromApp from './store/app.reducer';
+import { AuthEffects } from './auth/store/auth.effects';
 
 @NgModule({
   declarations: [AppComponent, HeaderComponent],
@@ -16,11 +18,12 @@ import { appReducer } from './store/app.reducer';
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
-    StoreModule.forRoot(appReducer),
+    StoreModule.forRoot(fromApp.appReducer),
+    EffectsModule.forRoot([AuthEffects]),
     SharedModule,
-    CoreModule,
+    CoreModule
   ],
-  bootstrap: [AppComponent],
+  bootstrap: [AppComponent]
   // providers: [LoggingService]
 })
 export class AppModule {}

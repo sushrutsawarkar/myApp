@@ -3,12 +3,12 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { catchError, tap } from 'rxjs/operators';
 import { throwError, BehaviorSubject } from 'rxjs';
+import { Store } from '@ngrx/store';
 import { environment } from '../../environments/environment';
 
 import { User } from './user.model';
-import { Store } from '@ngrx/store';
-import { AppState } from '../store/app.reducer';
-import * as authActions from './store/auth-actions';
+import * as fromApp from '../store/app.reducer';
+import * as AuthActions from './store/auth.actions';
 
 export interface AuthResponseData {
   kind: string;
@@ -22,62 +22,14 @@ export interface AuthResponseData {
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  // user = new BehaviorSubject<any>(null);
+  // user = new BehaviorSubject<User>(null);
   private tokenExpirationTimer: any;
 
   constructor(
     private http: HttpClient,
     private router: Router,
-    private store: Store<AppState>
+    private store: Store<fromApp.AppState>
   ) {}
-
-  signup(email: string, password: string) {
-    return this.http
-      .post<AuthResponseData>(
-        'https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=' +
-          environment.firebaseAPIKey,
-        {
-          email: email,
-          password: password,
-          returnSecureToken: true,
-        }
-      )
-      .pipe(
-        catchError(this.handleError),
-        tap((resData) => {
-          this.handleAuthentication(
-            resData.email,
-            resData.localId,
-            resData.idToken,
-            +resData.expiresIn
-          );
-        })
-      );
-  }
-
-  login(email: string, password: string) {
-    return this.http
-      .post<AuthResponseData>(
-        'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=' +
-          environment.firebaseAPIKey,
-        {
-          email: email,
-          password: password,
-          returnSecureToken: true,
-        }
-      )
-      .pipe(
-        catchError(this.handleError),
-        tap((resData) => {
-          this.handleAuthentication(
-            resData.email,
-            resData.localId,
-            resData.idToken,
-            +resData.expiresIn
-          );
-        })
-      );
-  }
 
   autoLogin() {
     const userData: {
@@ -85,7 +37,7 @@ export class AuthService {
       id: string;
       _token: string;
       _tokenExpirationDate: string;
-    } = JSON.parse(localStorage.getItem('userData')!);
+    } = JSON.parse(localStorage.getItem('userData'));
     if (!userData) {
       return;
     }
@@ -100,11 +52,11 @@ export class AuthService {
     if (loadedUser.token) {
       // this.user.next(loadedUser);
       this.store.dispatch(
-        new authActions.Login({
-          userId: loadedUser.id,
+        new AuthActions.AuthenticateSuccess({
           email: loadedUser.email,
+          userId: loadedUser.id,
           token: loadedUser.token,
-          expirationDate: new Date(userData._tokenExpirationDate),
+          expirationDate: new Date(userData._tokenExpirationDate)
         })
       );
       const expirationDuration =
@@ -116,8 +68,7 @@ export class AuthService {
 
   logout() {
     // this.user.next(null);
-    this.store.dispatch(new authActions.Logout());
-    this.router.navigate(['/auth']);
+    this.store.dispatch(new AuthActions.Logout());
     localStorage.removeItem('userData');
     if (this.tokenExpirationTimer) {
       clearTimeout(this.tokenExpirationTimer);
@@ -138,14 +89,14 @@ export class AuthService {
     expiresIn: number
   ) {
     const expirationDate = new Date(new Date().getTime() + expiresIn * 1000);
-    const user = new User(email, userId, token, expirationDate);
     // this.user.next(user);
+    const user = new User(email, userId, token, expirationDate);
     this.store.dispatch(
-      new authActions.Login({
+      new AuthActions.AuthenticateSuccess({
         email: email,
         userId: userId,
         token: token,
-        expirationDate: expirationDate,
+        expirationDate: expirationDate
       })
     );
     this.autoLogout(expiresIn * 1000);
