@@ -20,7 +20,7 @@ export class AuthService {
 
   constructor(private store: Store<fromApp.AppState>) {}
 
-  autoLogout(expirationDuration: number) {
+  setLogoutTimer(expirationDuration: number) {
     this.tokenExpirationTimer = setTimeout(() => {
       this.store.dispatch(new AuthActions.Logout());
     }, expirationDuration);
