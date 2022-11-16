@@ -1343,6 +1343,13 @@
   dependencies:
     "tslib" "^2.0.0"
 
+"@ngrx/store-devtools@^14.3.2":
+  "integrity" "sha512-lm1BobiHXzBC3tqYNAghCRNfBdIbs4JyfaTO9wqOEoDCh6COvzGLi7tAo9Zjls1REZC1NiIwSw4vKK8OMc+tfA=="
+  "resolved" "https://registry.npmjs.org/@ngrx/store-devtools/-/store-devtools-14.3.2.tgz"
+  "version" "14.3.2"
+  dependencies:
+    "tslib" "^2.0.0"
+
 "@ngrx/store@^14.3.2", "@ngrx/store@14.3.2":
   "integrity" "sha512-XGHjr0arh6gClo8Ce+xqJLvW9PkeXPW2tCo9Z5qMtHFI/z5dUppLVKGmMgD/fQBDyoqWTK5xu+89tDkdeZfRjQ=="
   "resolved" "https://registry.npmjs.org/@ngrx/store/-/store-14.3.2.tgz"
