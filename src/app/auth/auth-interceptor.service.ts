@@ -3,25 +3,32 @@ import {
   HttpInterceptor,
   HttpRequest,
   HttpHandler,
-  HttpParams
+  HttpParams,
 } from '@angular/common/http';
-import { take, exhaustMap } from 'rxjs/operators';
+import { take, exhaustMap, pluck, map } from 'rxjs/operators';
 
 import { AuthService } from './auth.service';
+import { Store } from '@ngrx/store';
+import { AppState } from '../store/app.reducer';
+import { User } from './user.model';
 
 @Injectable()
 export class AuthInterceptorService implements HttpInterceptor {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private store: Store<AppState>
+  ) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler) {
-    return this.authService.user.pipe(
+    return this.store.select('auth').pipe(
       take(1),
-      exhaustMap(user => {
+      map((authstate) => authstate.user),
+      exhaustMap((user: User) => {
         if (!user) {
           return next.handle(req);
         }
         const modifiedReq = req.clone({
-          params: new HttpParams().set('auth', user.token)
+          params: new HttpParams().set('auth', user.token || ''),
         });
         return next.handle(modifiedReq);
       })
