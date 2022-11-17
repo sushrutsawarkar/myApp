@@ -156,7 +156,7 @@
     "uuid" "8.3.2"
     "yargs" "17.5.1"
 
-"@angular/common@^14.2.0", "@angular/common@14.2.9":
+"@angular/common@^14.0.0", "@angular/common@^14.2.0", "@angular/common@14.2.9":
   "integrity" "sha512-nC1He98gj4FQqSo31Fb9ZJ+Ao3jJbmAg1JAdF5L0tkY70YydM91HXAp/JDrJ12O7IomenAwEHONFCVxgUfqUJw=="
   "resolved" "https://registry.npmjs.org/@angular/common/-/common-14.2.9.tgz"
   "version" "14.2.9"
@@ -214,7 +214,7 @@
   dependencies:
     "tslib" "^2.3.0"
 
-"@angular/router@^14.2.0":
+"@angular/router@^14.0.0", "@angular/router@^14.2.0":
   "integrity" "sha512-xg5Ajmn7mt6bosUDDotGzWORMfNGqi1otOUT8Sj2TpkvJebCaOS78GBBMnF8H5zaq8Pi+IsLM46kSJakFGdnVg=="
   "resolved" "https://registry.npmjs.org/@angular/router/-/router-14.2.9.tgz"
   "version" "14.2.9"
@@ -1339,6 +1339,13 @@
 "@ngrx/effects@^14.3.2":
   "integrity" "sha512-6bpGfA44jzwhBcmNaTwVgnFmYOX9iKPFpXyetDe41tVESo1CsNhUBPTmISDXKN9Mx2mwGbsMxrn6QFRypSsKAQ=="
   "resolved" "https://registry.npmjs.org/@ngrx/effects/-/effects-14.3.2.tgz"
+  "version" "14.3.2"
+  dependencies:
+    "tslib" "^2.0.0"
+
+"@ngrx/router-store@^14.3.2":
+  "integrity" "sha512-3FU/fADoMCLjv9vFXp1Xq+W1JGVQbfPDp8gzzsuBoQSXlh3MnUbXJdeODzt0h6GDk4FtpeJnsR1R9x+Fh2cFZg=="
+  "resolved" "https://registry.npmjs.org/@ngrx/router-store/-/router-store-14.3.2.tgz"
   "version" "14.3.2"
   dependencies:
     "tslib" "^2.0.0"
